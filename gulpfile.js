@@ -4,15 +4,10 @@ var concat = require('gulp-concat');
 var watch = require('gulp-watch');
 var cleanCSS = require('gulp-clean-css');
 var connect = require('gulp-connect');
+var gulpUtil = require('gulp-util');
 
 //js 프로젝트 소스파일
 var jsfiles = ['src/js/app.js'];
-
-gulp.task('concat:js', function() {
-  return gulp.src(jsfiles)
-    .pipe(concat('app.js'))
-    .pipe(gulp.dest('temp/'));
-});
 
 gulp.task('copy:html', function() {
   return gulp.src('src/*.html')
@@ -20,22 +15,22 @@ gulp.task('copy:html', function() {
     .pipe(gulp.dest('dist/'));
 });
 
-// no librarys
-// NOT USED
 gulp.task('copy:lib', function() {
   return gulp.src('src/lib/**/*')
     .pipe(gulp.dest('dist/lib'));
 });
 
 gulp.task('minify:js', function() {
-  return gulp.src('temp/app.js')
-    .pipe(uglify())
-    .pipe(gulp.dest('dist/js'));
+	return gulp.src('src/js/*.js')
+		.pipe(gulp.dest('temp'))
+		.pipe(uglify().on('error', gulpUtil.log))
+		.pipe(gulp.dest('dist/js'));
 });
 
 gulp.task('minify:css', function() {
   return gulp.src('src/css/*.css')
-    .pipe(gulp.dest('dist/css'));
+		.pipe(cleanCSS())
+    .pipe(gulp.dest('dist/css/'));
 });
 
 gulp.task('watch', function() {
@@ -46,12 +41,12 @@ gulp.task('connect', function() {
   connect.server({
     root: 'dist',
     livereload: true,
-    port: 3001
+    port: 3000
   });
 });
 
-
-gulp.task('copy', ['copy:html']);
-gulp.task('build', ['concat:js', 'copy', 'minify:css', 'minify:js']);
+gulp.task('copy', ['copy:html', 'copy:lib']);
+gulp.task('build', ['copy', 'minify:css', 'minify:js']);
 gulp.task('server', ['connect'])
 gulp.task('default', ['build', 'watch', 'server']);
+
