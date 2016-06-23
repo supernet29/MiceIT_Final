@@ -2,6 +2,10 @@ body,h1 {
     margin: 0;
     padding: 0;
 }
+body {
+	background: white;
+
+}
 .header {
     background: #eee;
     height: 30px;

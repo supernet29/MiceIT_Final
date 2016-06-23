@@ -1,16 +1,80 @@
-console.log('my-note app.js');
-console.log('woochan start');
+console.log("app.js");
 
-var btn_new = $('.btn-newnote');
-var btn_save = $('.btn-savenote');
-var btn_about = $('.btn-about');
-var btn_maximize = $('.btn-maximize');
-var btn_close = $('.btn_close');
+// memo container.
+var $memo = $("#memo");
 
-var div_about = $('.about');
+// menu buttons.
+var $buttons = $(".menu > button");
 
-btn_close.on ('click', function() {
-	console.log('click : ' + this.text);
-	div_about.show();
-});
+var btn_new = $buttons[0];
+var btn_save = $buttons[1];
+var btn_about = $buttons[2];
+var btn_maximize = $buttons[3];
 
+// about window.
+var $about = $(".about");
+var btn_close = $(".btn_close")[0];
+
+// full screen.
+function fullScreen(element) 
+{
+	try
+	{
+		element.requestFullScreen();
+	}
+	catch (e)
+	{
+		try
+		{
+			element.webkitRequestFullScreen();
+		}
+		catch (l)
+		{
+			element.mozRequestFullScreen();
+		}
+	}
+}
+
+// event listener.
+$(
+	function()
+	{
+		var memo = localStorage.getItem("memo");
+		$memo.val(memo);
+	}
+ );
+btn_new.addEventListener("click",
+	function()
+	{
+		$memo.val("");
+	}
+);
+
+btn_save.addEventListener("click",
+	function()
+	{
+		var memo = $memo.val();
+		localStorage.setItem("memo", memo);
+	}
+);
+
+btn_about.addEventListener("click",
+	function() 
+	{
+		$about.show();
+	}
+);
+
+btn_maximize.addEventListener("click",
+	function()
+	{
+		fullScreen(document.body);
+	}
+);
+
+btn_close.addEventListener("click",
+	function()
+	{
+		$about.hide();
+	}
+);
