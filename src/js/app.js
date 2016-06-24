@@ -43,6 +43,7 @@ $(
 		$memo.val(memo);
 	}
  );
+
 btn_new.addEventListener("click",
 	function()
 	{
